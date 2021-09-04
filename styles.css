@@ -1,0 +1,100 @@
+body{
+    font-family:'Courier New', Courier, monospace;
+    padding: 5%;
+    padding-top: 5px;
+    text-align: center;
+    background-color: #333;
+    color: #ddd;
+}
+
+input, button, select{
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #333;
+    color: #ddd;
+}
+
+.header {
+    font-weight: bold;
+    font-size: 32px;
+}
+
+.buttonLink{
+    background-color: transparent;
+    border: none;
+    font-size: inherit;
+    padding: 0;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.buttonLink:hover{
+    color: cyan;
+}
+
+.metaParamInput{
+    margin-bottom: 12px;
+}
+
+select:focus{
+    outline: none;
+}
+
+.numInput{
+    width: 40px;
+    height: 20px;
+    font-size: 16px;
+    border: 2px solid #666;
+    border-radius: 5px;
+}
+
+.numInput:focus{
+    outline:none;
+}
+
+table{
+    border-spacing: 2px;
+}
+
+td{
+    border: 0px solid #666;
+    margin: 0;
+}
+
+td:hover::before{
+    border: none;
+}
+
+.cell{
+    border: none;
+    outline: 2px solid #666;
+    background-color: #444;
+    font-size: 14px;
+    width: 48px;
+    height: 20px;
+}
+
+.cell:focus{
+    border: none;
+    outline: 2px solid #ccc;
+}
+
+.copyLatex{
+    font-size: 20px;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    background-color: white;
+    border-radius: 5px;
+    color: black;
+    outline:none;
+}
+
+.copyLatex:hover{
+    background-color: #0cc;
+}
+
+textarea{
+    background-color: #444;
+    color: #ccc;
+    border: 2px solid #666;
+    outline: none;
+}

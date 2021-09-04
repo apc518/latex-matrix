@@ -1,85 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>LaTeX Matrix Generator</title>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Latex Matrix Generator</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="styles.css"/>
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="main.js"></script>
-	<style>
-		.header {
-			grid-area: header;
-			text-align: center;
-			font-size: 20px;
-		}
-		.main {
-			grid-area: main;
-		}
-
-		.grid-container {
-			display: grid;
-			grid-template-columns: repeat(6,1fr);
-			grid-template-areas:
-				'header header header header header header'
-				'. main main main main .';
-		}
-		.grid-container > div {
-			padding: 20px 0;
-		}
-	</style>
 </head>
-<body onload="addEvents();genTable();">
-	<a href="https://github.com/jasonwarta/latex-matrix">
-		<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"
-			alt="Fork me on GitHub">
-	</a>
-	<div class="grid-container">
-		<div class="header">
-			Latex Matrix Generator
-		</div>
-		<div class="main">
-			<div>
-				<p>Generate latex code for a given matrix.</p>
-				<p>Matricies can be entered in the table or pasted into the text field as a tab-delimited glob of text. Correct latex is generated for any entered fractions.</p>
-			</div>
-			<div>
-				<label>Type
-					<select id='matrix-value'>
-						<option value="matrix">matrix</option>
-						<option value="pmatrix">pmatrix</option>
-						<option value="bmatrix" selected>bmatrix</option>
-						<option value="Bmatrix">Bmatrix</option>
-						<option value="vmatrix">vmatrix</option>
-						<option value="Vmatrix">Vmatrix</option>
-					</select>
-				</label>
-				<label>Rows
-					<input type="number" id="rows" value="3" style="width:30px;" onchange="genTable();">
-				</label>
-				<label>Cols
-					<input type="number" id="cols" value="3" style="width:30px;" onchange="genTable();">
-				</label>
-			</div>
-			<div style="display:inline">
-				<div id="table" style="display:inline-block;"></div>
-				<div id="textInput" style="display:inline-block;">
-					<div>
-						<span style="display: inherit;">Enter a tab-delimited matrix</span>
-					<textarea style="width:200px;min-height:80px" id="text-input" cols="30" placeholder="a_1	a_2	a_3
-		b_1	b_2	b_3
-		c_1	c_2	c_3"></textarea>
-					</div>
-					
-				</div>
-			</div>
-			<br>
-			Generate Latex...
-			<button id="gen-latex-table" onclick="genLatex()">...From Table</button>
-			<button id="gen-latex-text" onclick="genLatexFromText()">...From Text</button>
-			<div>
-				<textarea id="latex" cols="40" rows="20"></textarea>
-			</div>
-		</div>
+<body onload="init();">
+	<div class="header">
+		LaTeX Matrix Generator
 	</div>
+	<div>
+		<p>Generate LaTeX code for a matrix of reasonable size.</p>
+		<span>You can enter values in a</span> 
+		<button class="buttonLink" onclick="explain()">similar way to excel</button> <span>Fractions work too!</span>
+	</div>
+	<br/>
+	<div class="metaParamInput">
+		<label>Type
+			<select id='matrix-value'>
+				<option value="matrix">matrix</option>
+				<option value="pmatrix">pmatrix</option>
+				<option value="bmatrix" selected>bmatrix</option>
+				<option value="Bmatrix">Bmatrix</option>
+				<option value="vmatrix">vmatrix</option>
+				<option value="Vmatrix">Vmatrix</option>
+			</select>
+		</label>
+		<label>Rows
+			<input class="numInput" type="number" id="rows" value="3" min="1" max="20">
+		</label>
+		<label>Cols
+			<input class="numInput" type="number" id="cols" value="3" min="1" max="20">
+		</label>
+	</div>
+	<div id="table" style="display:inline-block;"></div>
+	<br/>
+	<button class="copyLatex" onclick="copyLatex()">Copy Text</button><br/>
+	<textarea spellcheck="false" id="latex" cols="40" rows="20"></textarea>
 </body>
 </html>

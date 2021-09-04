@@ -1,24 +1,30 @@
-addEvents = () => {
-    document.getElementById('text-input').addEventListener("keyup", function (event) {
-        event.preventDefault();
-        if (event.keyCode == 13) {
-            document.getElementById("gen-latex-text").click();
-        }
-    });
-
-    document.getElementById('text-input').addEventListener('keydown', (e) => {
-        if (e.keyCode == 9) {
-            console.log(this);
-            let elem = document.getElementById('text-input');
-            elem.value += "	";
-            if (e.preventDefault)
-                e.preventDefault();
-            return false;
-        }
-    });
+/**
+ * @author Andy Chamberlain // https://github.com/apc518
+ */
+const init = () => {
+    genTable();
+    document.getElementById('matrix-value').oninput = () => genLatex();
+    let rowsInput = document.getElementById('rows');
+    let colsInput = document.getElementById('cols');
+    rowsInput.onclick = () => rowsInput.select();
+    rowsInput.oninput = () => {
+        genTable();
+        genLatex();
+    };
+    colsInput.onclick = () => colsInput.select();
+    colsInput.oninput = () => {
+        genTable();
+        genLatex();
+    };
+    genLatex();
 }
 
-genTable = () => {
+
+/**
+ * @author Jason Warta // https://github.com/jasonwarta
+ * a couple tweaks by Andy Chamberlain
+ */
+const genTable = () => {
     let table = document.getElementById('table');
     let rows = document.getElementById('rows').value;
     let cols = document.getElementById('cols').value;
@@ -32,14 +38,10 @@ genTable = () => {
             let td = document.createElement('td');
             let input = document.createElement('input');
             input.type = 'text';
-            input.style.width = "30px";
-            input.value = `${String.fromCharCode(97+i)}_${j+1}`;
-            input.addEventListener("keyup", function (event) {
-                event.preventDefault();
-                if (event.keyCode == 13) {
-                    document.getElementById("gen-latex-table").click();
-                }
-            });
+            input.className = "cell";
+            input.onclick = () => input.select();
+            input.value = `${String.fromCharCode(97+i)}${j+1}`;
+            input.oninput = () => genLatex();
             td.appendChild(input);
             tr.appendChild(td);
         }
@@ -48,40 +50,10 @@ genTable = () => {
     table.appendChild(table_wip);
 }
 
-genLatexFromText = () => {
-    let text = document.getElementById('text-input').value;
-    let matrix_type = document.getElementById('matrix-value').value;
-    let rows = text.split('\n');
-    let latex = `$ \\begin{${matrix_type}}\n`;
-    rows.forEach((r_val, r_idx) => {
-        let cols = r_val.split('\t');
-        cols.forEach((c_val, c_idx) => {
-            let neg = false;
-            if (c_val.indexOf('-') == 0) {
-                neg = true;
-                c_val = c_val.substr(1, c_val.length);
-            }
-            if (c_val.indexOf('/') != -1) {
-                let vals = c_val.split('/');
-                c_val = `\\frac{${vals[0]}}{${vals[1]}}`
-            }
-            latex += `${neg ? '-' : ''}${c_val}`;
-            if (c_idx == cols.length - 1) {
-                if (r_idx == rows.length - 1)
-                    latex += " \n";
-                else
-                    latex += " \\\\\n";
-            } else {
-                latex += " & ";
-            }
-        });
-    });
-    latex += `\\end{${matrix_type}}  $`
-
-    document.getElementById("latex").value = latex;
-}
-
-genLatex = () => {
+/**
+ * @author Jason Warta // https://github.com/jasonwarta
+ */
+const genLatex = () => {
     let table = document.getElementById('table').children[0];
     let matrix_type = document.getElementById('matrix-value').value;
     let latex = `$ \\begin{${matrix_type}}\n`;
@@ -114,4 +86,37 @@ genLatex = () => {
     latex += `\\end{${matrix_type}}  $`
 
     document.getElementById("latex").value = latex;
+}
+
+/**
+ * @author Andy Chamberlain // https://github.com/apc518
+ */
+const copyLatex = () => {
+    var copyText = document.getElementById("latex");
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+
+    /* Copy the text inside the text field */
+    navigator.clipboard.writeText(copyText.value);
+
+    Swal.fire({
+        icon: 'success',
+        title: 'Copied to Clipboard',
+        showConfirmButton: false,
+        timer: 1000
+    });
+}
+
+/**
+ * @author Andy Chamberlain // https://github.com/apc518
+ */
+const explain = () => {
+    Swal.fire({
+        title: 'Controls like Excel',
+        text: 'When you click on a cell, you can immediately start typing. If you then press tab, you will go to the next cell.',
+        icon: 'info',
+        confirmButtonText: 'Nice.'
+    });
 }
