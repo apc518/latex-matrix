@@ -1,9 +1,12 @@
+let activeInput;
+
 /**
  * @author Andy Chamberlain // https://github.com/apc518
  */
 const init = () => {
     genTable();
-    document.getElementById('matrix-value').oninput = () => genLatex();
+    document.getElementById('matrix-enclosing').oninput = () => genLatex();
+    document.getElementById('matrix-align').oninput = () => genLatex();
     let rowsInput = document.getElementById('rows');
     let colsInput = document.getElementById('cols');
     rowsInput.onclick = () => rowsInput.select();
@@ -16,6 +19,18 @@ const init = () => {
         genTable();
         genLatex();
     };
+
+    let topLeftCell = document.getElementById('tableWrapper').children[0].children[0].children[0].children[0];
+    topLeftCell.click();
+    topLeftCell.focus();
+    activeInput = topLeftCell;
+
+    document.addEventListener('click', (e) => {
+        if(['input', 'select'].indexOf(e.target.nodeName.toLowerCase()) > -1){
+            activeInput = e.target;
+        }
+    })
+
     genLatex();
 }
 
@@ -25,7 +40,7 @@ const init = () => {
  * a couple tweaks by Andy Chamberlain
  */
 const genTable = () => {
-    let table = document.getElementById('table');
+    let table = document.getElementById('tableWrapper');
     let rows = document.getElementById('rows').value;
     let cols = document.getElementById('cols').value;
 
@@ -52,11 +67,14 @@ const genTable = () => {
 
 /**
  * @author Jason Warta // https://github.com/jasonwarta
+ * some tweaks by Andy Chamberlain
  */
 const genLatex = () => {
-    let table = document.getElementById('table').children[0];
-    let matrix_type = document.getElementById('matrix-value').value;
-    let latex = `$ \\begin{${matrix_type}}\n`;
+    let table = document.getElementById('tableWrapper').children[0];
+    let matrix_enclosing = document.getElementById('matrix-enclosing').value;
+    let matrix_align = document.getElementById('matrix-align').value;
+    console.log(`matrix_align: ${matrix_align}`);
+    let latex = `${matrix_align} \\begin{${matrix_enclosing}}\n`;
     let rows = table.children;
     for (let row = 0; row < rows.length; row++) {
         let cols = rows[row].children;
@@ -83,7 +101,7 @@ const genLatex = () => {
             }
         }
     }
-    latex += `\\end{${matrix_type}}  $`
+    latex += `\\end{${matrix_enclosing}}  ${matrix_align}`
 
     document.getElementById("latex").value = latex;
 }
@@ -100,6 +118,9 @@ const copyLatex = () => {
 
     /* Copy the text inside the text field */
     navigator.clipboard.writeText(copyText.value);
+
+    activeInput.click();
+    activeInput.focus();
 
     Swal.fire({
         icon: 'success',

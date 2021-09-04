@@ -35,20 +35,12 @@ input, button, select{
     margin-bottom: 12px;
 }
 
-select:focus{
-    outline: none;
-}
-
 .numInput{
     width: 40px;
     height: 20px;
     font-size: 16px;
     border: 2px solid #666;
     border-radius: 5px;
-}
-
-.numInput:focus{
-    outline:none;
 }
 
 table{
@@ -78,18 +70,34 @@ td:hover::before{
     outline: 2px solid #ccc;
 }
 
+select{
+    margin-top: 10px;
+    height: 26px;
+    border: 2px solid #666;
+    border-radius: 5px;
+}
+
+select:hover{
+    background-color: #444;
+}
+
 .copyLatex{
     font-size: 20px;
     margin-top: 12px;
     margin-bottom: 5px;
-    background-color: white;
+    background-color: #fff;
+    border: 2px solid #fff;
     border-radius: 5px;
     color: black;
-    outline:none;
+    transition:ease 0.2s;
 }
 
 .copyLatex:hover{
-    background-color: #0cc;
+    background-color: #aaa;
+}
+
+.copyLatex:focus-visible{
+    background-color: #aaa;
 }
 
 textarea{

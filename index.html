@@ -16,20 +16,10 @@
 	<div>
 		<p>Generate LaTeX code for a matrix of reasonable size.</p>
 		<span>You can enter values in a</span> 
-		<button class="buttonLink" onclick="explain()">similar way to excel</button> <span>Fractions work too!</span>
+		<button class="buttonLink" onclick="explain()">similar way to excel.</button><br/><span>Fractions work too!</span>
 	</div>
 	<br/>
 	<div class="metaParamInput">
-		<label>Type
-			<select id='matrix-value'>
-				<option value="matrix">matrix</option>
-				<option value="pmatrix">pmatrix</option>
-				<option value="bmatrix" selected>bmatrix</option>
-				<option value="Bmatrix">Bmatrix</option>
-				<option value="vmatrix">vmatrix</option>
-				<option value="Vmatrix">Vmatrix</option>
-			</select>
-		</label>
 		<label>Rows
 			<input class="numInput" type="number" id="rows" value="3" min="1" max="20">
 		</label>
@@ -37,7 +27,24 @@
 			<input class="numInput" type="number" id="cols" value="3" min="1" max="20">
 		</label>
 	</div>
-	<div id="table" style="display:inline-block;"></div>
+	<div id="tableWrapper" style="display:inline-block;"></div>
+	<br/>
+	<label>Enclose With
+		<select id='matrix-enclosing'>
+			<option value="matrix">none</option>
+			<option value="pmatrix">( )</option>
+			<option value="bmatrix" selected>[ ]</option>
+			<option value="Bmatrix">{ }</option>
+			<option value="vmatrix">| |</option>
+			<option value="Vmatrix">‖ ‖</option>
+		</select>
+	</label>
+	<label>Align
+		<select id='matrix-align'>
+			<option value="$">left</option>
+			<option value="$$" selected>center</option>
+		</select>
+	</label>
 	<br/>
 	<button class="copyLatex" onclick="copyLatex()">Copy Text</button><br/>
 	<textarea spellcheck="false" id="latex" cols="40" rows="20"></textarea>
