@@ -40,7 +40,7 @@ const genTable = () => {
             input.type = 'text';
             input.className = "cell";
             input.onclick = () => input.select();
-            input.value = `${String.fromCharCode(97+i)}${j+1}`;
+            input.value = `${String.fromCharCode(97+i)}_${j+1}`;
             input.oninput = () => genLatex();
             td.appendChild(input);
             tr.appendChild(td);
