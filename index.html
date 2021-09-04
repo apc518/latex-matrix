@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<title>LaTeX Matrix Generator</title>
 	<meta charset="utf-8" />
@@ -7,9 +7,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="styles.css"/>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 	<script src="main.js"></script>
 </head>
-<body onload="init();">
+<body onload="init();" onresize="positionPreview()">
 	<div class="header">
 		LaTeX Matrix Generator
 	</div>
@@ -47,6 +48,10 @@
 	</label>
 	<br/>
 	<button class="copyLatex" onclick="copyLatex()">Copy Text</button><br/>
-	<textarea spellcheck="false" id="latex" cols="40" rows="20"></textarea>
+	<textarea spellcheck="false" id="latex" cols="36" rows="12"></textarea><br/>
+	<p>Preview</p>
+	<div id="previewWrapper" class="previewWrapper">
+		<div id="preview" class="latexPreview"></div>
+	</div>
 </body>
 </html>

@@ -1,5 +1,16 @@
 let activeInput;
 
+MathJax = {
+    tex: {
+        inlineMath: [['$', '$'], 
+                    ['\\(', '\\)']]
+    },
+    svg: {
+        fontCache: 'global'
+    }
+};
+
+
 /**
  * @author Andy Chamberlain // https://github.com/apc518
  */
@@ -29,7 +40,7 @@ const init = () => {
         if(['input', 'select'].indexOf(e.target.nodeName.toLowerCase()) > -1){
             activeInput = e.target;
         }
-    })
+    });
 
     genLatex();
 }
@@ -66,14 +77,12 @@ const genTable = () => {
 }
 
 /**
- * @author Jason Warta // https://github.com/jasonwarta
- * some tweaks by Andy Chamberlain
+ * @author Jason Warta, Andy Chamberlain // https://github.com/jasonwarta, https://github.com/apc518
  */
 const genLatex = () => {
     let table = document.getElementById('tableWrapper').children[0];
     let matrix_enclosing = document.getElementById('matrix-enclosing').value;
     let matrix_align = document.getElementById('matrix-align').value;
-    console.log(`matrix_align: ${matrix_align}`);
     let latex = `${matrix_align} \\begin{${matrix_enclosing}}\n`;
     let rows = table.children;
     for (let row = 0; row < rows.length; row++) {
@@ -104,6 +113,15 @@ const genLatex = () => {
     latex += `\\end{${matrix_enclosing}}  ${matrix_align}`
 
     document.getElementById("latex").value = latex;
+    document.getElementById("preview").innerHTML = latex;
+    MathJax.typeset();
+    
+    let previewWrapperWidth = Math.max(250, document.getElementsByClassName('MJX-TEX')[0].clientWidth + 60);
+    let previewWrapperHeight = Math.max(150, document.getElementsByClassName('MJX-TEX')[0].clientHeight + 60);
+    let previewWrapper = document.getElementById('preview');
+    previewWrapper.style.width = `${previewWrapperWidth}px`;
+    previewWrapper.style.height = `${previewWrapperHeight}px`;
+    // previewWrapper.style.left = `${window.innerWidth / 2 - previewWrapperWidth / 2}px`;
 }
 
 /**

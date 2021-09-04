@@ -61,7 +61,7 @@ td:hover::before{
     outline: 2px solid #666;
     background-color: #444;
     font-size: 14px;
-    width: 48px;
+    width: 52px;
     height: 20px;
 }
 
@@ -105,4 +105,14 @@ textarea{
     color: #ccc;
     border: 2px solid #666;
     outline: none;
+}
+
+.previewWrapper{
+    display: flex;
+    justify-content: center;
+}
+
+.latexPreview{
+    background-color: #444;
+    text-align: left;
 }
