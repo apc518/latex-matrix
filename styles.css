@@ -28,7 +28,7 @@ input, button, select{
 }
 
 .buttonLink:hover{
-    color: cyan;
+    color: #0cc;
 }
 
 .metaParamInput{
@@ -115,4 +115,15 @@ textarea{
 .latexPreview{
     background-color: #444;
     text-align: left;
+}
+
+a, a:active, a:visited{
+    color: #ccc;
+    position: fixed;
+    left: 16px;
+    top: calc(100vh - 32px);
+}
+
+a:hover{
+    color: #0cc;
 }

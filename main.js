@@ -1,5 +1,8 @@
 let activeInput;
 
+let initialTypingInCell = false;
+let editingInCell = false;
+
 MathJax = {
     tex: {
         inlineMath: [['$', '$'], 
@@ -31,16 +34,112 @@ const init = () => {
         genLatex();
     };
 
-    let topLeftCell = document.getElementById('tableWrapper').children[0].children[0].children[0].children[0];
-    topLeftCell.click();
-    topLeftCell.focus();
-    activeInput = topLeftCell;
+    rowsInput.click();
+    rowsInput.focus();
+    activeInput = rowsInput;
 
     document.addEventListener('click', (e) => {
+        initialTypingInCell = false;
+        editingInCell = false;
         if(['input', 'select'].indexOf(e.target.nodeName.toLowerCase()) > -1){
             activeInput = e.target;
         }
     });
+
+    document.addEventListener('keydown', (e) => {
+        // console.log(e);
+        let numRows = document.getElementById('rows').value;
+        let numCols = document.getElementById('cols').value;
+
+        // figure out which row/col we are in, if in the table. 
+        let row = -1;
+        let col = -1;
+        for(let i = 0; i < numRows; i++){
+            for(let k = 0; k < numCols; k++){
+                if(document.getElementById('tableWrapper').children[0].children[i].children[k].children[0] == document.activeElement){
+                    row = i;
+                    col = k;
+                }
+            }
+        }
+
+        if(row >= 0 && col >= 0){
+            if(!e.key.startsWith("Arrow")
+                && e.key !== 'Enter'
+                && e.key !== 'Tab'
+                && e.key !== 'Escape'
+                && !editingInCell && !initialTypingInCell){
+                console.log("hello");
+                initialTypingInCell = true;
+                editingInCell = false;
+            }
+
+            if(e.key === 'Tab'){
+                console.log("there");
+                initialTypingInCell = false;
+                editingInCell = false;
+            }
+
+            if(e.key === 'Escape'){
+                document.activeElement.click();
+            }
+
+            if(e.key === 'Enter'){
+                let newCell;
+                if(editingInCell || initialTypingInCell){
+                    if(e.shiftKey){
+                        newCell = document.getElementById('tableWrapper').children[0].children[Math.max(0, row-1)].children[col].children[0];    
+                    }
+                    else{
+                        newCell = document.getElementById('tableWrapper').children[0].children[Math.min(numRows - 1, row+1)].children[col].children[0];
+                    }
+                    setTimeout(() => newCell.click(), 10); // prevents text editing from enter key on new cell
+                }
+                else{
+                    newCell = document.activeElement;
+                    let len = newCell.value.length;
+
+                    if (newCell.setSelectionRange) {
+                        newCell.focus();
+                        newCell.setSelectionRange(len, len);
+                    } else if (newCell.createTextRange) {
+                        var t = newCell.createTextRange();
+                        t.collapse(true);
+                        t.moveEnd('character', len);
+                        t.moveStart('character', len);
+                        t.select();
+                    }
+
+                    initialTypingInCell = false;
+                    editingInCell = true;
+                }
+            }
+
+            if(e.key.startsWith("Arrow")){
+                if(!editingInCell){
+                    console.log("kenobi");
+                    let newCell;
+                    if(e.key === "ArrowUp"){
+                        newCell = document.getElementById('tableWrapper').children[0].children[Math.max(0, row-1)].children[col].children[0];
+                    }
+                    else if(e.key === "ArrowDown"){
+                        newCell = document.getElementById('tableWrapper').children[0].children[Math.min(numRows - 1, row+1)].children[col].children[0];
+                    }
+                    else if(e.key === "ArrowLeft"){
+                        newCell = document.getElementById('tableWrapper').children[0].children[row].children[Math.max(0, col-1)].children[0];
+                    }
+                    else if(e.key === "ArrowRight"){
+                        newCell = document.getElementById('tableWrapper').children[0].children[row].children[Math.min(numCols - 1, col+1)].children[0];
+                    }
+                    // if we instantly clicked on newCell, 
+                    // then the selection process would happen at the same time as the arrow press,
+                    // but arrow presses undo selections, so the selection wouldn't occur
+                    // but we dont have to wait long! (only 1ms in this case)
+                    setTimeout(() => newCell.click(), 10);
+                }
+            }
+        }
+    })
 
     genLatex();
 }
@@ -153,8 +252,8 @@ const copyLatex = () => {
  */
 const explain = () => {
     Swal.fire({
-        title: 'Controls like Excel',
-        text: 'When you click on a cell, you can immediately start typing. If you then press tab, you will go to the next cell.',
+        title: 'Familiar Controls',
+        text: 'Selecting cells, using tab and enter, and using the arrow keys all work exactly like google sheets!',
         icon: 'info',
         confirmButtonText: 'Nice.'
     });

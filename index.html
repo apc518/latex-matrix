@@ -10,14 +10,15 @@
 	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 	<script src="main.js"></script>
 </head>
-<body onload="init();" onresize="positionPreview()">
+<body onload="init();">
 	<div class="header">
 		LaTeX Matrix Generator
 	</div>
 	<div>
 		<p>Generate LaTeX code for a matrix of reasonable size.</p>
-		<span>You can enter values in a</span> 
-		<button class="buttonLink" onclick="explain()">similar way to excel.</button><br/><span>Fractions work too!</span>
+		<span>You can enter values into the grid</span> 
+		<button class="buttonLink" onclick="explain()">just like google sheets.</button><br/>
+		<span>\usepackage{amsmath} must be near the top of your document.</span>
 	</div>
 	<br/>
 	<div class="metaParamInput">
@@ -53,5 +54,7 @@
 	<div id="previewWrapper" class="previewWrapper">
 		<div id="preview" class="latexPreview"></div>
 	</div>
+
+	<a href="//github.com/apc518/latex-matrix" target="_blank">Github</a>
 </body>
 </html>
