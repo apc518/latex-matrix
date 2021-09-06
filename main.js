@@ -3,6 +3,7 @@ let activeInput;
 let initialTypingInCell = false;
 let editingInCell = false;
 
+// initialize MathJax
 MathJax = {
     tex: {
         inlineMath: [['$', '$'], 
