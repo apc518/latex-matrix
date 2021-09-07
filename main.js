@@ -96,6 +96,8 @@ const init = () => {
             }
 
             if(e.key === 'Escape'){
+                editingInCell = false;
+                initialTypingInCell = false;
                 document.activeElement.click();
             }
 
@@ -156,8 +158,6 @@ const init = () => {
             }
         }
     });
-
-    console.log(fullGrid);
 
     genLatex();
 }
