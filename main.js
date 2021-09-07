@@ -3,6 +3,15 @@ let activeInput;
 let initialTypingInCell = false;
 let editingInCell = false;
 
+// initialize fullGrid
+let fullGrid = [];
+for(let i = 0; i < 20; i++){
+    fullGrid.push([]);
+    for(let k = 0; k < 20; k++){
+        fullGrid[i].push(`${String.fromCharCode(97+i)}_${k+1}`);
+    }
+}
+
 // initialize MathJax
 MathJax = {
     tex: {
@@ -14,6 +23,7 @@ MathJax = {
     }
 };
 
+// setInterval(() => console.log(`initialTypingInCell: ${initialTypingInCell}, editingInCell: ${editingInCell}`), 1000);
 
 /**
  * @author Andy Chamberlain // https://github.com/apc518
@@ -39,14 +49,20 @@ const init = () => {
     rowsInput.focus();
     activeInput = rowsInput;
 
-    document.addEventListener('click', (e) => {
-        initialTypingInCell = false;
-        editingInCell = false;
+    document.addEventListener('mousedown', (e) => {
+        if(e.target !== activeInput){
+            initialTypingInCell = false;
+            editingInCell = false;
+        }
+        else{
+            editingInCell = true;
+        }
         if(['input', 'select'].indexOf(e.target.nodeName.toLowerCase()) > -1){
             activeInput = e.target;
         }
     });
 
+    // grid navigation logic
     document.addEventListener('keydown', (e) => {
         // console.log(e);
         let numRows = document.getElementById('rows').value;
@@ -70,13 +86,11 @@ const init = () => {
                 && e.key !== 'Tab'
                 && e.key !== 'Escape'
                 && !editingInCell && !initialTypingInCell){
-                console.log("hello");
                 initialTypingInCell = true;
                 editingInCell = false;
             }
 
             if(e.key === 'Tab'){
-                console.log("there");
                 initialTypingInCell = false;
                 editingInCell = false;
             }
@@ -87,13 +101,15 @@ const init = () => {
 
             if(e.key === 'Enter'){
                 let newCell;
-                if(editingInCell || initialTypingInCell){
+                if(editingInCell || initialTypingInCell){ // commiting whatever is written
                     if(e.shiftKey){
                         newCell = document.getElementById('tableWrapper').children[0].children[Math.max(0, row-1)].children[col].children[0];    
                     }
                     else{
                         newCell = document.getElementById('tableWrapper').children[0].children[Math.min(numRows - 1, row+1)].children[col].children[0];
                     }
+                    editingInCell = false;
+                    initialTypingInCell = false;
                     setTimeout(() => newCell.click(), 10); // prevents text editing from enter key on new cell
                 }
                 else{
@@ -118,7 +134,6 @@ const init = () => {
 
             if(e.key.startsWith("Arrow")){
                 if(!editingInCell){
-                    console.log("kenobi");
                     let newCell;
                     if(e.key === "ArrowUp"){
                         newCell = document.getElementById('tableWrapper').children[0].children[Math.max(0, row-1)].children[col].children[0];
@@ -140,7 +155,9 @@ const init = () => {
                 }
             }
         }
-    })
+    });
+
+    console.log(fullGrid);
 
     genLatex();
 }
@@ -160,13 +177,15 @@ const genTable = () => {
     let table_wip = document.createElement('table');
     for (let i = 0; i < rows; i++) {
         let tr = document.createElement('tr');
-        for (let j = 0; j < cols; j++) {
+        for (let k = 0; k < cols; k++) {
             let td = document.createElement('td');
             let input = document.createElement('input');
             input.type = 'text';
             input.className = "cell";
-            input.onclick = () => input.select();
-            input.value = `${String.fromCharCode(97+i)}_${j+1}`;
+            input.onclick = () => {
+                if(!editingInCell && !initialTypingInCell) input.select();
+            };
+            input.value = fullGrid[i][k];
             input.oninput = () => genLatex();
             td.appendChild(input);
             tr.appendChild(td);
@@ -212,6 +231,8 @@ const genLatex = () => {
     }
     latex += `\\end{${matrix_enclosing}}  ${matrix_align}`
 
+    updateFullGrid();
+
     document.getElementById("latex").value = latex;
     document.getElementById("preview").innerHTML = latex;
     MathJax.typeset();
@@ -222,6 +243,18 @@ const genLatex = () => {
     previewWrapper.style.width = `${previewWrapperWidth}px`;
     previewWrapper.style.height = `${previewWrapperHeight}px`;
     // previewWrapper.style.left = `${window.innerWidth / 2 - previewWrapperWidth / 2}px`;
+}
+
+const updateFullGrid = () => {
+    let table = document.getElementById('tableWrapper').children[0];
+    let rows = table.children;
+    for (let row = 0; row < rows.length; row++) {
+        let cols = rows[row].children;
+        for (let col = 0; col < cols.length; col++) {
+            let val = cols[col].children[0].value;
+            fullGrid[row][col] = val;
+        }
+    }
 }
 
 /**
