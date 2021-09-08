@@ -3,12 +3,22 @@ let activeInput;
 let initialTypingInCell = false;
 let editingInCell = false;
 
+let hasUsedTemplate = false;
+
 // initialize fullGrid
 let fullGrid = [];
+let previousFullGrid = [];
 for(let i = 0; i < 20; i++){
     fullGrid.push([]);
     for(let k = 0; k < 20; k++){
         fullGrid[i].push(`${String.fromCharCode(97+i)}_${k+1}`);
+    }
+}
+
+for(let i = 0; i < 20; i++){
+    previousFullGrid.push([]);
+    for(let k = 0; k < 20; k++){
+        previousFullGrid[i].push(fullGrid[i][k]);
     }
 }
 
@@ -64,7 +74,7 @@ const init = () => {
 
     // grid navigation logic
     document.addEventListener('keydown', (e) => {
-        // console.log(e);
+        // console.log(e.key);
         let numRows = document.getElementById('rows').value;
         let numCols = document.getElementById('cols').value;
 
@@ -78,6 +88,17 @@ const init = () => {
                     col = k;
                 }
             }
+        }
+
+        if(e.key === "z" && e.ctrlKey){
+            // revert to previous grid
+            for(let i = 0; i < 20; i++){
+                for(let k = 0; k < 20; k++){
+                    fullGrid[i][k] = previousFullGrid[i][k];
+                }
+            }
+            genTable();
+            genLatex();
         }
 
         if(row >= 0 && col >= 0){
@@ -159,6 +180,21 @@ const init = () => {
         }
     });
 
+    genLatex();
+}
+
+const genMatrix = (template) => {
+    for(let i = 0; i < 20; i++){
+        for(let k = 0; k < 20; k++){
+            previousFullGrid[i][k] = fullGrid[i][k];
+        }
+    }
+    for(let i = 0; i < 20; i++){
+        for(let k = 0; k < 20; k++){
+            fullGrid[i][k] = template === 'zero' ? 0 : (i === k ? 1 : 0);
+        }
+    }
+    genTable();
     genLatex();
 }
 

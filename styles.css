@@ -81,6 +81,15 @@ select:hover{
     background-color: #444;
 }
 
+.matrixTemplate{
+    border: 2px solid #666;
+    border-radius: 5px;
+}
+
+.matrixTemplate:hover{
+    background-color: #444;
+}
+
 .copyLatex{
     font-size: 20px;
     margin-top: 12px;
