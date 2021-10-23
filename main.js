@@ -270,7 +270,6 @@ const genLatex = () => {
     document.getElementById("latex").value = latex;
     document.getElementById("preview").innerHTML = latex;
     MathJax.typeset();
-    setTimeout(() => MathJax.typeset(), 0); // ensure that the typesetting runs with everything loaded properly by deferring it until the stack is empty
     
     let previewWrapperWidth = Math.max(250, document.getElementsByClassName('MJX-TEX')[0].clientWidth + 60);
     let previewWrapperHeight = Math.max(150, document.getElementsByClassName('MJX-TEX')[0].clientHeight + 60);
